@@ -33,7 +33,7 @@ func doRequest(token string, request *http.Request) ([]byte, error) {
 }
 
 func getAllRecords(ctx context.Context, token string, zone string) ([]libdns.Record, error) {
-	body, err := json.Marshal(ListRecords{Method: "list-records", Params: struct {
+	body, err := json.Marshal(NjallaRequest{Method: "list-records", Params: struct {
 		Domain string `json:"domain"`
 	}{Domain: zone}})
 	if err != nil {
@@ -73,7 +73,7 @@ func getAllRecords(ctx context.Context, token string, zone string) ([]libdns.Rec
 }
 
 func createRecord(ctx context.Context, token string, zone string, record libdns.Record) (libdns.Record, error) {
-	body, err := json.Marshal(CreateRecord{Method: "add-record", Params: struct {
+	body, err := json.Marshal(NjallaRequest{Method: "add-record", Params: struct {
 		Domain  string `json:"domain"`
 		Name    string `json:"name"`
 		Content string `json:"content"`
@@ -117,10 +117,10 @@ func createRecord(ctx context.Context, token string, zone string, record libdns.
 }
 
 func editRecord(ctx context.Context, token string, zone string, record libdns.Record) (libdns.Record, error) {
-	body, err := json.Marshal(EditRecord{Method: "edit-record", Params: struct {
-		Domain  string "json:\"domain\""
-		ID      string "json:\"id\""
-		Content string "json:\"content\""
+	body, err := json.Marshal(NjallaRequest{Method: "edit-record", Params: struct {
+		Domain  string `json:"domain"`
+		ID      string `json:"id"`
+		Content string `json:"content"`
 	}{
 		Domain:  zone,
 		ID:      record.ID,
@@ -157,7 +157,7 @@ func editRecord(ctx context.Context, token string, zone string, record libdns.Re
 }
 
 func removeRecord(ctx context.Context, token string, zone string, record libdns.Record) error {
-	body, err := json.Marshal(RemoveRecord{Method: "remove-record", Params: struct {
+	body, err := json.Marshal(NjallaRequest{Method: "remove-record", Params: struct {
 		Domain string `json:"domain"`
 		ID     string `json:"id"`
 	}{
